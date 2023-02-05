@@ -3,10 +3,12 @@
 import os
 import sys
 
+from drf_template.environment import Environment
+
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf_template.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', Environment.get_enviroment_settings())
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

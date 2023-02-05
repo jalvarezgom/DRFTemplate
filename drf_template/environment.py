@@ -37,6 +37,15 @@ class Environment:
         Environment._LOAD_STATUS = True
 
     @staticmethod
+    def get_enviroment_settings():
+        Environment.load()
+        if Environment.is_dev_mode():
+            setting = 'drf_template.settings.dev'
+        else:
+            setting = 'drf_template.settings.pro'
+        return setting
+
+    @staticmethod
     def __create_default_local_storage():
         if not os.path.exists(Environment.LOCAL_STORAGE):
             os.makedirs(Environment.LOCAL_STORAGE)
