@@ -50,11 +50,12 @@ class Environment:
     @staticmethod
     def __load_logger_configuration():
         if Environment.is_dev_mode():
-            setting = LOGGER_DEV
+            Environment.LOGGER_CFG = LOGGER_DEV
         else:
-            setting = LOGGER_PRO
-            setting['handlers']['rotate'] = f"{Environment.env('LOGS_DIRECTORY')}/{setting['handlers']['rotate']}"
-        return setting
+            if not os.path.exists(Environment.env('LOGS_DIRECTORY')):
+                raise Exception(f"[Logger] Directory does not exist - {Environment.env('LOGS_DIRECTORY')}")
+            Environment.LOGGER_CFG = LOGGER_PRO
+            Environment.LOGGER_CFG['handlers']['rotate']['filename'] = f"{Environment.env('LOGS_DIRECTORY')}/{Environment.LOGGER_CFG['handlers']['rotate']['filename']}"
 
 if not Environment._LOAD_STATUS:
     Environment.load()

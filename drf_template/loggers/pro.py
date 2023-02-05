@@ -19,5 +19,9 @@ LOGGER_PRO = {
             "backupCount": 0,
         },
     },
-    "loggers": {"django": {"handlers": ["rotate"]}},
+    "loggers": {
+        "django": {
+            "handlers": ["rotate"]
+        }
+    },
 }
