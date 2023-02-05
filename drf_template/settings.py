@@ -9,21 +9,23 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_URL = "api/"
+from drf_template.environment import Environment
+
+BASE_DIR = Environment.BASE_DIR
+BASE_URL = Environment.BASE_URL
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o#o^)t$$h(1)9x5#^=q1&4oz_-()2zxb9_pg8_@h96n22+i*z+'
+SECRET_KEY = Environment.env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = Environment.env('DEBUG') == 'True'
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -82,9 +84,13 @@ WSGI_APPLICATION = 'drf_template.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': Environment.env('DATABASE_ENGINE'),
+        'NAME': Environment.env('DATABASE_NAME'),
+        'USER': Environment.env('DATABASE_USER'),
+        'PASSWORD': Environment.env('DATABASE_PASSWORD'),
+        'HOST': Environment.env('DATABASE_HOST'),
+        'PORT': Environment.env('DATABASE_PORT'),
+    },
 }
 
 # Password validation
@@ -107,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = Environment.env('TIME_ZONE')
 USE_I18N = True
 USE_TZ = True
 
@@ -171,21 +177,7 @@ AUTHENTICATION_BACKENDS = (
 ########################
 # LOGGING
 ########################
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler"
-        }
-    },
-    "loggers": {
-        "django": {
-            "level": "INFO",
-            "handlers": ["console"]
-        }
-    },
-}
+LOGGING = Environment.LOGGER_CFG
 
 ########################
 # CORS
